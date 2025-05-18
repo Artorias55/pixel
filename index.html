@@ -3,11 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <title>PIXEL</title>
         <style>
             header{
-                transform: translateZ(0);
                 font-size: 43px;
                 font-weight: bold;
                 font-family:"abordage";
@@ -28,16 +26,24 @@
               
                  z-index: 9999;
             }
+            header::after {
+                 content: "";
+                    position: absolute;
+                    bottom: 0;
+                    /* left: 2%; */
+                    width: calc(96% - 12px);
+                    border-bottom: 2px solid black;
+                }
             .name{
                 padding-top: 20px;
             }
-            .line{
+            /* .line{
                 width: calc(96% - 12px);
                 border-bottom: 2px solid rgb(0, 0, 0);
                 /* margin-bottom: 0; */
                 /* flex:1 */
     
-            }
+            } */
          
           
             .outer{
@@ -112,7 +118,7 @@
     <body>
         <header>
             <div class="name">256*256</div>
-            <div class="line"></div>
+            <!-- <div class="line"></div> -->
             <!-- <hr class="clean-line"> -->
         </header>
         <div class='space'></div>
