@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="no-scrollbar">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +32,7 @@
                 justify-content: center;
                 align-content: space-between;
               
-                 z-index: 9999;
+                 z-index: 1;
             }
             header::after {
                  content: "";
@@ -53,9 +53,17 @@
                 gap:12px 6px;
                 margin:16px auto;
                  flex-wrap: wrap;}
+
+            .blur{
+                filter: blur(6px);
+                pointer-events: none; /* 禁止交互 */
+                transition: filter 0.3s;
+                transition-timing-function:ease-out;
+                z-index: 1;
+            }
          
             .date{
-                font-size:1.2vw;
+                /* font-size:1.2vw; */
                 /* vertical-align: middle; */
                 font-family:"abordage";
                 margin: auto;
@@ -67,6 +75,7 @@
             }
             .card{
                 aspect-ratio: 8/10;
+                background-color: white;
 
                 border-radius:3px; 
                 box-shadow: 0px 0px 3px rgb(80, 80, 80);
@@ -88,17 +97,15 @@
                 align-content: flex-start;
                 /* 让hover里的向上移动生效 */
                 position: relative;
+                font-size:1.2vw;
+                color: black;
             }
             .card:hover{
                 box-shadow: 0px 0px 4px rgb(53, 53, 53);
                 cursor: pointer;
-                top: -0.5px;
+                /* top: -0.5px; */
             }
-            /* @media (max-width:992px) {
-                .card{
-                    flex-basis: calc(33% - 2.2px);
-                }
-            } */
+           
              .space{height: 80px;}
              @media (max-width:900px) {
                 .card{
@@ -109,21 +116,64 @@
                 header{height: 60px;}
                 .space{height: 60px;}
             }
+            .selected{
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                    width: 70vw;          /* 优先宽度 70% */
+                    max-height: 90vh;     /* 最大高度不超过 90% 屏幕 */
+                    height: auto;         /* 高度自适应 */
+
+                    max-width: calc(90vh * 0.7); /* 限制宽度在高不够时自适应缩小 */
+                 flex-basis: calc(60% - 4.8px);
+                z-index: 2;
+                border-radius: 10px;
+                font-size:27px;
+
+            }
+            .selected img.grid-overlay {
+                position: absolute;
+                /* top: 0; */
+                /* left: 0; */
+                width: 100%;  /* 和父容器一样大 */
+                /* height: 100%; */
+                pointer-events: none;  /* 让点击穿透，不影响交互 */
+                user-select: none;     /* 防止选中 */
+                /* image-rendering: pixelated;  */
+                z-index: 10;  /* 保证在原图上方 */
+            }
+            
+         
+            /* 只隐藏滚动条，不禁用滚动 */
+            .no-scrollbar {
+                overflow:auto;
+                -ms-overflow-style: none;  /* IE 和 Edge */
+                scrollbar-width: none;     /* Firefox */
+            }
+
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;             /* Chrome, Safari */
+            }
+               .no-scroll {
+                overflow: hidden; */
+                /* padding-right: 15px; */
+            }
+                        
 
 
         </style>
     </head>
-    <body>
+    <body class="no-scrollbar">
         <header>
             <div class="name">256*256</div>
             <!-- <div class="line"></div> -->
             <!-- <hr class="clean-line"> -->
         </header>
         <div class='space'></div>
-
-      
+     
       <div class="outer">
-          <div class="card"> 
+         <div class="card"> 
             <img src="./draws/25.5.20.png" alt="" >
             <div class="date"> </div>
          </div>
@@ -134,7 +184,7 @@
           <div class="card"> 
                 <img src="./draws/25.5.17.png" alt="" >
                 <div class="date"></div>
-         </div>
+          </div>
          <div class="card"> 
             <img src="./draws/25.5.14.jpg" alt="" >
             <div class="date"></div>
@@ -373,23 +423,94 @@
        
       </div>
       <script>
-    // 获取所有卡片
-    const cards = document.querySelectorAll('.card');
-    
-    cards.forEach(card => {
-        // 找到卡片内的 img 和 date 元素
-        const img = card.querySelector('img');
-        const dateDiv = card.querySelector('.date');
-        
-        if (img && dateDiv) {
-            // 从 src 中提取文件名（去掉路径和扩展名）
-            const src = img.getAttribute('src');
-            const fileName = src.match(/([^\/]+)(?=\.\w+$)/)[0]; // 匹配最后一个斜杠和扩展名之间的内容
+        const cards = document.querySelectorAll('.card');
+        const outer = document.querySelector('.outer');
+        const header = document.querySelector('header');
 
-            // 更新日期文本
-            dateDiv.textContent = fileName.replace(/_/g, '.'); // 可选：将下划线替换为点
-        }
-    });
+        let selectedCard = null;
+
+        cards.forEach(card => {
+            const img = card.querySelector('img');
+            const dateDiv = card.querySelector('.date');
+
+            if (img && dateDiv) {
+                const src = img.getAttribute('src');
+                const fileName = src.match(/([^\/]+)(?=\.\w+$)/)[0];
+                dateDiv.textContent = fileName.replace(/_/g, '.');
+            }
+
+            card.onclick = function (e) {
+                e.stopPropagation();
+
+                // 如果已有选中的卡片，先清除
+                if (selectedCard) {
+                    // selectedCard.remove();
+                    outer.classList.remove('blur');
+                    header.classList.remove('blur');
+                    document.body.classList.remove('no-scroll');
+                    document.documentElement.classList.remove('no-scroll');
+                    document.body.classList.remove('no-scroll');
+                    selectedCard = null;
+                    return;
+                }
+
+                // 克隆当前卡片
+                const clone = card.cloneNode(true);
+                clone.classList.add('selected');
+                     // 创建一个新的图片元素
+                    const img = document.createElement('img');
+                    img.src = './draws/g2.PNG';  // 替换成你想插入的图片地址
+                    // img.alt = 'description';         // 可选，图片描述
+                    img.classList.add('grid-overlay');
+                    // 把图片插入到clone的第一个子元素位置
+                    clone.insertBefore(img, clone.firstChild);
+
+                // 点击克隆卡片关闭
+                clone.onclick = function (e) {
+                    e.stopPropagation();
+                    clone.remove();
+                    outer.classList.remove('blur');
+                    header.classList.remove('blur');
+                    document.body.classList.remove('no-scroll');
+                    document.documentElement.classList.remove('no-scroll');
+                    document.body.classList.remove('no-scroll');
+                    selectedCard = null;
+                };
+
+                document.body.appendChild(clone);
+                outer.classList.add('blur');
+                header.classList.add('blur');
+                document.body.classList.add('no-scroll');
+                document.documentElement.classList.add('no-scroll');
+                document.body.classList.add('no-scroll');
+                selectedCard = clone;
+                  // 设置初始样式（透明、缩小）
+                clone.style.opacity = '0';
+                clone.style.transition = 'opacity 0.2s ease, transform 0.2s ease-out';
+
+                // 下一帧再触发过渡到目标样式（完全显示、正常大小）
+                requestAnimationFrame(() => {
+                    clone.style.opacity = '1';
+                });
+
+                
+            };
+        });
+
+        // 点击空白区域关闭选中
+        document.body.onclick = () => {
+            if (selectedCard) {
+                selectedCard.remove();
+                outer.classList.remove('blur');
+                header.classList.remove('blur');
+                document.body.classList.remove('no-scroll');
+                document.documentElement.classList.remove('no-scroll');
+                document.body.classList.remove('no-scroll');
+                selectedCard = null;
+            }
+        };
+
+    
 </script>
     </body> 
 </html>
