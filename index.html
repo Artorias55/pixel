@@ -52,6 +52,9 @@
                 --color2: #1C1916;
                 --color1: #ECEBE1;
             }
+            *, *::before, *::after {
+            box-sizing: border-box;
+            }
             
             html{background-color: var(--color1);}   
             header{
@@ -90,7 +93,7 @@
                 width: 96%;
                 display: flex;
                 justify-items: auto;
-                gap:12px 6px;
+                gap:20px 20px;
                 margin:16px auto;
                  flex-wrap: wrap;}
 
@@ -132,7 +135,7 @@
                 /* flex-grow: 1;
                 flex-shrink: 1; */
                 /* 每行放五个 */
-                flex-basis: calc(20% - 7.2px);
+                flex-basis: calc((100% - 20px * 3 ) / 4);
 
                 display: flex;
                 flex-direction: column;
@@ -153,10 +156,10 @@
                 /* top: -0.5px; */
             }
            
-             .space{height: calc(3vw - 12px);}
+             .space{height: calc(3vw - 6px);}
              @media (max-width:900px) {
                 .card{
-                    flex-basis: calc(50% - 5.5px);
+                    flex-basis: calc(50% - 10px);
                 }
                 .date {font-size: 2vw; }
                 .name{padding-top: 5px; }
