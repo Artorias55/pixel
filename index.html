@@ -55,6 +55,16 @@
             *, *::before, *::after {
             box-sizing: border-box;
             }
+            a {
+                text-decoration: none; /* 取消下划线 */
+                color: inherit;        /* 继承父元素颜色，不是默认蓝 */
+                cursor: pointer;       /* 鼠标变成手型，提示可点击 */
+            }
+            .top:hover {
+                text-decoration: underline; /* 鼠标悬停时显示下划线 */
+                color: #eed3b7;              /* 或你喜欢的颜色 */
+                cursor: pointer;
+            }
             
             html{background-color: var(--color1);}   
             header{
@@ -76,13 +86,22 @@
                 /* align-content: space-between; */
               
                  z-index: 1;
+                 display: flex;
+                /* flex-wrap: wrap; */
+                justify-content: space-between;
+            }
+            .left{
+                margin-left: 10px;
+            }
+            .right{
+                margin-right: 10px;
             }
             header::after {
                  content: "";
                     position: absolute;
                     bottom: 0;
                     /* left: 2%; */
-                    width: calc(96% - 16px);
+                    width: 100%;
                     border-bottom: 1.5px solid var(--color2);
                 }
             .name{
@@ -171,11 +190,11 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                    width: 85vw;          /* 优先宽度 70% */
-                    max-height: 90vh;     /* 最大高度不超过 90% 屏幕 */
+                    width: 90vw;          /* 优先宽度 70% */
+                    max-height: 100vh;     /* 最大高度不超过 90% 屏幕 */
                     height: auto;         /* 高度自适应 */
 
-                    max-width: calc(90vh * 0.7); /* 限制宽度在高不够时自适应缩小 */
+                    max-width: calc(100vh * 0.72); /* 限制宽度在高不够时自适应缩小 */
                  flex-basis: calc(60% - 4.8px);
                 z-index: 2;
                 border-radius: 10px;
@@ -217,7 +236,9 @@
     </head>
     <body class="no-scrollbar">
         <header>
+            <a href="http://127.0.0.1:5500/homepage.html" class="name left top">back</a>
             <div class="name">ordinary days</div>
+            <div class="top name right">contact</div>
             <!-- <div class="line"></div> -->
             <!-- <hr class="clean-line"> -->
         </header>
